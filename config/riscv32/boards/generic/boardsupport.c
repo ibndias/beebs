@@ -20,17 +20,25 @@
    along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 #include <support.h>
+#include <encoding.h>
+
+#define HAVE_BOARD_SUPPORT_H
 
 void initialise_board()
 {
 }
 
+unsigned long cycle_start;
+
 void start_trigger()
 {
+  cycle_start = read_csr(cycle);
 }
 
 void stop_trigger()
 {
+  unsigned long cycle_stop = read_csr(cycle);
+  //printf("cycles=%ld\n", cycle_stop-cycle_start);
 }
 
 
