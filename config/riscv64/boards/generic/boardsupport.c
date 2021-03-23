@@ -26,18 +26,23 @@
 
 void initialise_board()
 {
+
 }
 
 unsigned long cycle_start;
 
 void start_trigger()
 {
-  cycle_start = read_csr(cycle);
+  //cycle_start = read_csr(cycle);
 }
 
 void stop_trigger()
 {
-  unsigned long cycle_stop = read_csr(cycle);
+
+
+    /* writing to 0x8c3 csr makes qemu to exit */
+    asm("csrw 0x8c3, a0");
+    //unsigned long cycle_stop = read_csr(cycle);
   //printf("cycles=%ld\n", cycle_stop-cycle_start);
 }
 
