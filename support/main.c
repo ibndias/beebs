@@ -24,7 +24,7 @@
    SPDX-License-Identifier: GPL-3.0-or-later */
 
 #include "support.h"
-
+#include <stdlib.h>
 
 extern int initialise_benchmark (void);
 extern int verify_benchmark (int unused);
@@ -36,7 +36,17 @@ main (int   argc __attribute__ ((unused)),
   int i;
   volatile int result;
   int correct;
-
+  
+  void * a;
+  void * b;
+  a = malloc(0x400000);
+  printf("STACK AT : %X\n", a);
+  b = a + 0x400000;
+  printf("REAL STACK AT : %X\n", b);
+  //asm("mov %0, %%x31" : : "r"(a));
+  asm("mv t6, %0" : : "r"(b));
+  //asm("mv t6, %0" : "=r"(a) :);
+  
   initialise_board ();
   initialise_benchmark ();
   start_trigger ();
@@ -53,6 +63,8 @@ main (int   argc __attribute__ ((unused)),
 
   correct = verify_benchmark (result);
 
+  free(a);
+  asm("csrw 0x8c3, a0");
   return (!correct);
 
 }	/* main () */

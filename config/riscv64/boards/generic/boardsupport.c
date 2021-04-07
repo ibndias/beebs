@@ -20,7 +20,7 @@
    along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 #include <support.h>
-#include <encoding.h>
+//#include <encoding.h>
 
 #define HAVE_BOARD_SUPPORT_H
 
@@ -41,7 +41,7 @@ void stop_trigger()
 
 
     /* writing to 0x8c3 csr makes qemu to exit */
-    asm("csrw 0x8c3, a0");
+    //asm("csrw 0x8c3, a0");
     //unsigned long cycle_stop = read_csr(cycle);
   //printf("cycles=%ld\n", cycle_stop-cycle_start);
 }
