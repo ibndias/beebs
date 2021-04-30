@@ -23,51 +23,50 @@
 
    SPDX-License-Identifier: GPL-3.0-or-later */
 
-#include "support.h"
 #include <stdlib.h>
 
-extern int initialise_benchmark (void);
-extern int verify_benchmark (int unused);
+#include "support.h"
 
-int
-main (int   argc __attribute__ ((unused)),
-      char *argv[] __attribute__ ((unused)) )
-{
-  int i;
-  volatile int result;
-  int correct;
-  
-  void * a;
-  void * b;
-  a = malloc(0x400000);
-  printf("STACK AT : %X\n", a);
-  b = a + 0x400000;
-  printf("REAL STACK AT : %X\n", b);
-  //asm("mov %0, %%x31" : : "r"(a));
-  asm("mv t6, %0" : : "r"(b));
-  //asm("mv t6, %0" : "=r"(a) :);
-  
-  initialise_board ();
-  initialise_benchmark ();
-  start_trigger ();
+extern int initialise_benchmark(void);
+extern int verify_benchmark(int unused);
 
-  for (i = 0; i < REPEAT_FACTOR; i++)
-    {
-      initialise_benchmark ();
-      result = benchmark ();
+int main(int argc __attribute__((unused)),
+         char *argv[] __attribute__((unused))) {
+    int i;
+    volatile int result;
+    int correct;
+
+    void *a;
+    void *b;
+    a = malloc(0x400000);
+    printf("STACK AT : %X\n", a);
+    b = a + 0x400000;
+    printf("REAL STACK AT : %X\n", b);
+    // asm("mov %0, %%x31" : : "r"(a));
+    asm("mv t6, %0" : : "r"(b));
+    // asm("mv t6, %0" : "=r"(a) :);
+
+    initialise_board();
+    initialise_benchmark();
+    start_trigger();
+
+    for (i = 0; i < REPEAT_FACTOR; i++) {
+        initialise_benchmark();
+        result = benchmark();
     }
 
-  stop_trigger ();
+    stop_trigger();
 
-  /* bmarks that use arrays will check a global array rather than int result */
+    /* bmarks that use arrays will check a global array rather than int result
+     */
 
-  correct = verify_benchmark (result);
-  
-  free(a);
-  asm("csrw 0x8c3, a0");
-  return (!correct);
+    correct = verify_benchmark(result);
 
-}	/* main () */
+    free(a);
+    // asm("csrw 0x8c3, a0");
+    return (!correct);
+
+} /* main () */
 
 /*
    Local Variables:

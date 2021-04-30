@@ -21,19 +21,18 @@
 
 #include <support.h>
 //#include <encoding.h>
+#define read_csr(reg) ({ unsigned long __tmp;asm volatile ("csrr %0 , " #reg : "=r" (__tmp));__tmp;})
 
 #define HAVE_BOARD_SUPPORT_H
+unsigned long cycle_start;
 
 void initialise_board()
 {
-
 }
-
-unsigned long cycle_start;
 
 void start_trigger()
 {
-  //cycle_start = read_csr(cycle);
+  cycle_start = read_csr(cycle);
 }
 
 void stop_trigger()
@@ -44,6 +43,9 @@ void stop_trigger()
     //asm("csrw 0x8c3, a0");
     //unsigned long cycle_stop = read_csr(cycle);
   //printf("cycles=%ld\n", cycle_stop-cycle_start);
+
+  unsigned long cycle_stop = read_csr(cycle);
+  printf("cycles = %ld\n",cycle_stop - cycle_start);
 }
 
 
