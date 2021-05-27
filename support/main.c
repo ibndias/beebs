@@ -45,7 +45,7 @@ int main(int argc __attribute__((unused)),
     // asm("mov %0, %%x31" : : "r"(a));
     asm("mv t6, %0" : : "r"(b));
     // asm("mv t6, %0" : "=r"(a) :);
-
+    asm("addi t6, t6, -16");
     initialise_board();
     initialise_benchmark();
     start_trigger();
